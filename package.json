@@ -1,0 +1,16 @@
+{
+  "name": "employee-manager",
+  "version": "1.0.0",
+  "description": "Employee manager application",
+  "scripts": {
+    "start": "concurrently \"cd backend && npm run start:dev\" \"cd frontend && npm run start\"",
+    "install-all": "concurrently \"cd backend && npm install\" \"cd frontend && npm install\""
+  },
+  "keywords": [],
+  "author": "LuongBaHop",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^6.2.1",
+    "npm-check-updates": "^12.1.0"
+  }
+}
