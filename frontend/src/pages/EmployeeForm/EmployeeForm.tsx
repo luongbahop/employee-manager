@@ -22,6 +22,7 @@ import { IEmployee } from "interfaces/employee.interface";
 import { useSelector } from "react-redux";
 import { RootState } from "store/store";
 import "./EmployeeForm.scss";
+import Loading from "components/Loading/Loading";
 
 const { Option } = Select;
 
@@ -123,19 +124,20 @@ export default function EmployeeForm() {
     }
   }, [employeeState.item, params]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     // you can add your functionality here
-  //   };
-  // }, [isFormChanged]);
+  useEffect(() => {
+    const handler = (e: any) => {
+      if (isFormChanged) {
+        e.returnValue = true;
+      }
+    };
 
-  // const handleUnload = (e: any) => {
-  //   e.preventDefault();
-  //   console.log("HELLO WORLD");
-  // };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [isFormChanged]);
 
   return (
     <section className="employee-form-page">
+      {employeeState.item.loading && <Loading />}
       <div className="site-page-header-ghost-wrapper">
         <PageHeader
           ghost={false}
