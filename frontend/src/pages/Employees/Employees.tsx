@@ -140,10 +140,12 @@ export default function Employees() {
       deleteEmployee({
         info: { id: employeeId },
         onSuccess: (res) => {
-          fetch();
-          notification.success({
-            message: "Delete employee successfully.",
-          });
+          if (res.success) {
+            fetch();
+            notification.success({
+              message: "Delete employee successfully.",
+            });
+          }
         },
 
         onError: (err) => {
@@ -158,8 +160,8 @@ export default function Employees() {
 
   const fetch = () => {
     const info = {
-      size: 1,
-      page: 1,
+      size: tableData.pagination.pageSize,
+      page: tableData.pagination.current,
     };
     dispatch(fetchEmployees({ info }));
   };

@@ -141,6 +141,21 @@ export default function EmployeeForm() {
           ghost={false}
           onBack={() => navigate(`/employee/list`)}
           title="Employee Form"
+          extra={[
+            params.employeeId ? (
+              <Button
+                key="1"
+                type="primary"
+                shape="round"
+                onClick={() => {
+                  navigate(`/employee/add`);
+                  form.setFieldsValue(defaultEmployee);
+                }}
+              >
+                Add new employee
+              </Button>
+            ) : null,
+          ]}
         />
       </div>
       <Form
@@ -249,7 +264,6 @@ export default function EmployeeForm() {
             type="primary"
             shape="round"
             htmlType="submit"
-            size="large"
             icon={<SendOutlined />}
           >
             {params.employeeId ? "Update employee" : "Add new employee"}

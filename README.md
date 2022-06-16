@@ -26,3 +26,7 @@ npm run install-all
 npm run start
 
 ```
+### To-do list
+- Handle sort from backend
+- Create common components in frontend
+- Deploy frontend and backend

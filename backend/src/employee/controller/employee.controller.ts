@@ -47,7 +47,7 @@ export class EmployeeController {
 
   @Delete('delete/:id')
   async delete(@Param('id') id: string) {
-    const data = this.employeeService.delete(+id);
+    const data = await this.employeeService.delete(+id);
     return { success: true, data };
   }
 }
