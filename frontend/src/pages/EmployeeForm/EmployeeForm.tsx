@@ -41,6 +41,7 @@ export default function EmployeeForm() {
   };
 
   const [employee, setEmployee] = useState(defaultEmployee);
+  const [isFormChanged, setIsFormChanged] = useState(false);
 
   const formItemLayout = {
     labelCol: {
@@ -58,6 +59,7 @@ export default function EmployeeForm() {
       createEmployee({
         info,
         onSuccess: (res) => {
+          setIsFormChanged(false);
           navigate(`/employee/edit/${res.data.id}`);
           notification.success({
             message: "Create employee successfully.",
@@ -79,6 +81,7 @@ export default function EmployeeForm() {
       updateEmployee({
         info,
         onSuccess: (data) => {
+          setIsFormChanged(false);
           navigate(`/employee/list`);
           notification.success({
             message: "Update employee successfully.",
@@ -101,21 +104,7 @@ export default function EmployeeForm() {
     } else {
       handleCreate(values);
     }
-    console.log(values);
   };
-
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        style={{ width: 70 }}
-        defaultActiveFirstOption
-        defaultValue="65"
-        disabled
-      >
-        <Option value="65">+65</Option>
-      </Select>
-    </Form.Item>
-  );
 
   useEffect(() => {
     if (params.employeeId) {
@@ -132,8 +121,19 @@ export default function EmployeeForm() {
       setEmployee(employeeState.item.result as IEmployee);
       form.setFieldsValue(employeeState.item.result);
     }
-    window.onbeforeunload = null;
   }, [employeeState.item, params]);
+
+  // useEffect(() => {
+  //   return () => {
+  //     // you can add your functionality here
+  //   };
+  // }, [isFormChanged]);
+
+  // const handleUnload = (e: any) => {
+  //   e.preventDefault();
+  //   console.log("HELLO WORLD");
+  // };
+
   return (
     <section className="employee-form-page">
       <div className="site-page-header-ghost-wrapper">
@@ -150,6 +150,9 @@ export default function EmployeeForm() {
         initialValues={employee}
         form={form}
         scrollToFirstError
+        onFieldsChange={() => {
+          setIsFormChanged(true);
+        }}
       >
         <Form.Item
           name="first_name"
@@ -212,11 +215,21 @@ export default function EmployeeForm() {
         <Form.Item
           name="phone"
           label="Phone Number"
+          tooltip="Example: 88887541 or +65 98753573 or +6565241234"
           rules={[
-            { required: true, message: "Please input your phone number!" },
+            {
+              validator: async (_, phone) => {
+                let regex = /[6|8|9]\d{7}|\+65[6|8|9]\d{7}|\+65\s[6|8|9]\d{7}/g;
+                if (!regex.test(phone)) {
+                  return Promise.reject(
+                    new Error("Phone number is not correct SG format.")
+                  );
+                }
+              },
+            },
           ]}
         >
-          <Input addonBefore={prefixSelector} style={{ width: "100%" }} />
+          <Input style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item label="Gender" name="gender" rules={[]}>
           <Radio.Group
@@ -228,18 +241,19 @@ export default function EmployeeForm() {
             buttonStyle="solid"
           />
         </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Space align="end">
-            <Button
-              type="primary"
-              shape="round"
-              htmlType="submit"
-              size="large"
-              icon={<SendOutlined />}
-            >
-              {params.employeeId ? "Update employee" : "Add new employee"}
-            </Button>
-          </Space>
+        <Form.Item
+          wrapperCol={{ offset: 8, span: 16 }}
+          className="form-buttons"
+        >
+          <Button
+            type="primary"
+            shape="round"
+            htmlType="submit"
+            size="large"
+            icon={<SendOutlined />}
+          >
+            {params.employeeId ? "Update employee" : "Add new employee"}
+          </Button>
         </Form.Item>
       </Form>
     </section>

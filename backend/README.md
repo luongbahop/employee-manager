@@ -1,6 +1,6 @@
 
 ## Description
-
+Employee manager backend is using NestJs + TypeORM + MySQL
 ## Installation
 
 ```bash
@@ -32,7 +32,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-

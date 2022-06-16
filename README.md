@@ -11,4 +11,14 @@
 - [Redux-toolkit]
 - [Ant-Design]
 
-#### Start app locally
+### Start app locally
+
+```bash
+
+npm install
+
+npm run install-all
+
+npm run start
+
+```

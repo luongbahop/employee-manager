@@ -96,13 +96,13 @@ export default function Employees() {
     },
     {
       title: "Actions",
-      key: "action",
-      render: (employee: IEmployee) => (
+      dataIndex: "id",
+      render: (employeeId: number) => (
         <Space size="middle">
-          <Link to={`/employee/edit/${employee.id}`}>Edit</Link>
+          <Link to={`/employee/edit/${employeeId}`}>Edit</Link>
           <Popconfirm
             title="Are you sure to delete this employee?"
-            onConfirm={() => handleDelete(employee.id)}
+            onConfirm={() => handleDelete(employeeId)}
             okText="Yes"
             cancelText="No"
           >
