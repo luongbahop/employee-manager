@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { EmployeesDto, GetEmployeesDto } from '../dto/employee.dto';
+import { EditEmployeeDto } from '../dto/edit-employee.dto';
+import {
+  CreateEmployeeDto,
+  EmployeesDto,
+  GetEmployeesDto,
+} from '../dto/employee.dto';
 import { Employee } from '../entities/employee.entity';
 
 @Injectable()
@@ -32,18 +37,21 @@ export class EmployeeService {
 
   async getOne(id: number) {
     const data = await this.employeeRepository.findOne({ where: { id } });
-    return { data };
+    return data;
   }
 
-  async create({}) {
-    `an action`;
+  async create(dto: CreateEmployeeDto) {
+    return await this.employeeRepository.save(dto);
   }
 
-  async update(id: number, {}) {
-    return `an action`;
+  async update(id: number, dto: EditEmployeeDto) {
+    const employee = await this.getOne(id);
+    const editedEmployee = { ...employee, ...dto };
+    return await this.employeeRepository.save(editedEmployee);
   }
 
   async delete(id: number) {
-    return `an action`;
+    const employee = await this.getOne(id);
+    return await this.employeeRepository.remove(employee);
   }
 }

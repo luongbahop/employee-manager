@@ -1,19 +1,23 @@
 import { Layout, Menu } from "antd";
 import { Content, Header } from "antd/lib/layout/layout";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 export default function MainLayout() {
   return (
     <Layout className="app-layout">
-      <Header>
+      <Header className="app-header">
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={["home"]}
+          selectedKeys={["home"]}
           items={[
             {
               key: "home",
-              label: `Employee Manager`,
+              label: <Link to="/">Home</Link>,
+            },
+            {
+              key: "employee",
+              label: <Link to="/employee/list">Employees</Link>,
             },
           ]}
         />

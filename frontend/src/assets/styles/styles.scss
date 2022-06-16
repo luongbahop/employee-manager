@@ -39,4 +39,16 @@ code {
 .app-layout {
   background: #fff;
   min-height: 100vh;
+  .app-header {
+    ul {
+      max-width: 1200px;
+      width: 100%;
+      margin: auto;
+    }
+  }
+  .app-content {
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
+  }
 }

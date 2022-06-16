@@ -1,36 +1,53 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { GetEmployeesDto } from '../dto/employee.dto';
-import { Employee } from '../entities/employee.entity';
+import { EditEmployeeDto } from '../dto/edit-employee.dto';
+import { CreateEmployeeDto, GetEmployeesDto } from '../dto/employee.dto';
 import { EmployeeService } from '../service/employee.service';
 
 @ApiTags('Employee APIs')
 @Controller('employee')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
-  
+
   @Post('create')
-  create(@Body() createEmployeeDto: Employee) {
-    return this.employeeService.create(createEmployeeDto);
+  async create(@Body() createEmployeeDto: CreateEmployeeDto) {
+    const data = await this.employeeService.create(createEmployeeDto);
+    return { success: true, data };
   }
 
   @Get('list')
-  getMany(@Query() query: GetEmployeesDto) {
-    return this.employeeService.getMany(query);
+  async getMany(@Query() query: GetEmployeesDto) {
+    const data = await this.employeeService.getMany(query);
+    return { success: true, data };
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string) {
-    return this.employeeService.getOne(+id);
+  async getOne(@Param('id') id: string) {
+    const data = await this.employeeService.getOne(+id);
+    return { success: true, data };
   }
 
   @Put('update/:id')
-  update(@Param('id') id: string, @Body() updateEmployeeDto: Employee) {
-    return this.employeeService.update(+id, updateEmployeeDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateEmployeeDto: EditEmployeeDto,
+  ) {
+    const data = await this.employeeService.update(+id, updateEmployeeDto);
+    return { success: true, data };
   }
 
   @Delete('delete/:id')
-  delete(@Param('id') id: string) {
-    return this.employeeService.delete(+id);
+  async delete(@Param('id') id: string) {
+    const data = this.employeeService.delete(+id);
+    return { success: true, data };
   }
 }

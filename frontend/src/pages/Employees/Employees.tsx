@@ -3,20 +3,28 @@ import React, { useEffect, useState } from "react";
 import { get } from "lodash";
 import queryString from "query-string";
 import { useSelector } from "react-redux";
-import { Button, PageHeader, Space, TablePaginationConfig, Table } from "antd";
+import {
+  Button,
+  PageHeader,
+  Space,
+  TablePaginationConfig,
+  Table,
+  Tag,
+  Popconfirm,
+  notification,
+} from "antd";
 
 // import internal libs
 import { useAppDispatch } from "helpers/hooks/redux.hook";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { fetchEmployees } from "store/employees/action";
+import { deleteEmployee, fetchEmployees } from "store/employees/action";
 import { IEmployee } from "interfaces/employee.interface";
-import { PAGINATION } from "constants/common.constan";
+import { PAGINATION } from "constants/common.constant";
 
 import { RootState } from "store/store";
 import { buildUrl } from "helpers/common.helper";
 import "./Employees.scss";
 import { ColumnsType } from "antd/lib/table";
-
 
 const initialPagination: TablePaginationConfig = {
   current: PAGINATION.DEFAULT_PAGE,
@@ -55,30 +63,51 @@ export default function Employees() {
     {
       title: "First Name",
       dataIndex: "first_name",
+      ellipsis: true,
     },
     {
       title: "Last Name",
       dataIndex: "last_name",
+      ellipsis: true,
     },
     {
       title: "Email Address",
       dataIndex: "email",
+      ellipsis: true,
     },
     {
       title: "Phone Number",
       dataIndex: "phone",
+      ellipsis: true,
     },
     {
       title: "Gender",
       dataIndex: "gender",
+      ellipsis: true,
+      render: (gender: number) => (
+        <div>
+          {gender === 1 ? (
+            <Tag color="#f50">Male</Tag>
+          ) : (
+            <Tag color="#87d068">Female</Tag>
+          )}
+        </div>
+      ),
     },
     {
       title: "Actions",
       key: "action",
       render: (employee: IEmployee) => (
         <Space size="middle">
-          <Link to={`/employee/${employee.id}`}>Edit</Link>
-          <a>Delete</a>
+          <Link to={`/employee/edit/${employee.id}`}>Edit</Link>
+          <Popconfirm
+            title="Are you sure to delete this employee?"
+            onConfirm={() => handleDelete(employee.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="link">Delete</Button>
+          </Popconfirm>
         </Space>
       ),
     },
@@ -106,12 +135,37 @@ export default function Employees() {
     });
   };
 
-  useEffect(() => {
+  const handleDelete = (employeeId: number) => {
+    dispatch(
+      deleteEmployee({
+        info: { id: employeeId },
+        onSuccess: (res) => {
+          fetch();
+          notification.success({
+            message: "Delete employee successfully.",
+          });
+        },
+
+        onError: (err) => {
+          notification.error({
+            message: "Delete employee failed.",
+            description: get(err, "response.data.message", ""),
+          });
+        },
+      })
+    );
+  };
+
+  const fetch = () => {
     const info = {
       size: 1,
       page: 1,
     };
     dispatch(fetchEmployees({ info }));
+  };
+
+  useEffect(() => {
+    fetch();
   }, [location]);
 
   useEffect(() => {
@@ -126,9 +180,6 @@ export default function Employees() {
     });
   }, [employeeState.list]);
 
-  console.log("employeeState", employeeState);
-  console.log("table", tableData);
-
   return (
     <section className="employees-page">
       <div className="site-page-header-ghost-wrapper">
@@ -136,7 +187,12 @@ export default function Employees() {
           ghost={false}
           title="Employee Manager"
           extra={[
-            <Button key="1" type="primary">
+            <Button
+              key="1"
+              type="primary"
+              shape="round"
+              onClick={() => navigate(`/employee/add`)}
+            >
               Add new employee
             </Button>,
           ]}

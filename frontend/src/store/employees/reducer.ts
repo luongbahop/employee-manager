@@ -30,7 +30,7 @@ export const employeeSlice = createSlice({
     },
     [fetchEmployee.fulfilled as any]: (state, action) => {
       state.item.loading = false;
-      state.item.result = action.payload;
+      state.item.result = action.payload.data;
       state.item.error = {};
     },
     [fetchEmployee.rejected as any]: (state, action) => {
@@ -46,7 +46,7 @@ export const employeeSlice = createSlice({
     },
     [createEmployee.fulfilled as any]: (state, action) => {
       state.item.loading = false;
-      state.item.result = action.payload;
+      state.item.result = action.payload.data;
       state.item.error = {};
     },
     [createEmployee.rejected as any]: (state, action) => {
@@ -62,7 +62,7 @@ export const employeeSlice = createSlice({
     },
     [updateEmployee.fulfilled as any]: (state, action) => {
       state.item.loading = false;
-      state.item.result = action.payload;
+      state.item.result = action.payload.data;
       state.item.error = {};
     },
     [updateEmployee.rejected as any]: (state, action) => {
@@ -70,7 +70,7 @@ export const employeeSlice = createSlice({
       state.item.error = action.error;
       state.item.result = {};
     },
-    
+
     [deleteEmployee.pending as any]: (state, action) => {
       state.item.loading = true;
       state.item.result = {};
@@ -78,7 +78,7 @@ export const employeeSlice = createSlice({
     },
     [deleteEmployee.fulfilled as any]: (state, action) => {
       state.item.loading = false;
-      state.item.result = action.payload;
+      state.item.result = action.payload.data;
       state.item.error = {};
     },
     [deleteEmployee.rejected as any]: (state, action) => {
@@ -94,7 +94,7 @@ export const employeeSlice = createSlice({
     },
     [fetchEmployees.fulfilled as any]: (state, action) => {
       state.list.loading = false;
-      state.list.result = action.payload;
+      state.list.result = action.payload.data;
       state.list.error = {};
     },
     [fetchEmployees.rejected as any]: (state, action) => {

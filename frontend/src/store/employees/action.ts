@@ -58,7 +58,7 @@ export const createEmployee = createAsyncThunk(
   async (params: ActionParams, { rejectWithValue }) => {
     try {
       const endpoint = `${CONFIGS.API_URL}/api/employee/create`;
-      const response = await postApi(endpoint, params);
+      const response = await postApi(endpoint, params.info);
       const data = response.data;
       if (params.onSuccess) {
         params.onSuccess(data);
@@ -78,7 +78,7 @@ export const updateEmployee = createAsyncThunk(
   async (params: ActionParams, { rejectWithValue }) => {
     try {
       const endpoint = `${CONFIGS.API_URL}/api/employee/update/${params.info.id}`;
-      const response = await putApi(endpoint, params);
+      const response = await putApi(endpoint, params.info);
       const data = response.data;
       if (params.onSuccess) {
         params.onSuccess(data);
